@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_template/controllers/carousel_image_controller.dart';
 import 'package:flutter_template/controllers/home_controller.dart';
 import 'package:flutter_template/controllers/user_controller.dart';
+import 'package:flutter_template/screens/bottom_navigation_bar/bottom_bar.dart';
 import 'package:get/get.dart';
 import '../../widgets/common_widgets/custom_app_bar.dart';
 import '../../widgets/home/address_bar.dart';

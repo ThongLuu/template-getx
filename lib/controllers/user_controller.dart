@@ -1,15 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter_template/models/user.dart';
+import 'package:flutter_template/services/user_service.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../../services/user_api_service.dart';
 import 'package:http/http.dart' as http;
 
 
 class UserController extends GetxController {
+  final UserApi userApi = UserApi();
   final box = GetStorage();
-  final user = User(
+  final user = const User(
       id: '',
       name: '',
       email: '',
@@ -28,7 +29,7 @@ class UserController extends GetxController {
 
  Future<User> getUserData() async {
     try {
-      http.Response res = (await getUserData()) as http.Response;
+      http.Response res = await userApi.getUserData();
 
       if (res.statusCode == 200) {
         User user = User.fromJson(
@@ -36,6 +37,7 @@ class UserController extends GetxController {
             jsonDecode(res.body),
           ),
         );
+        saveToStorage(user);
         return user;
       } else {
         throw Exception(jsonDecode(res.body)['msg']);

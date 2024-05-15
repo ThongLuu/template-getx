@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/account_screen.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/views/cart/cart_screen.dart';
+import 'package:flutter_template/controllers/bottom_bar_controller.dart';
+import 'package:flutter_template/controllers/cart/cart_controller.dart';
+import 'package:flutter_template/controllers/user_controller.dart';
+import 'package:flutter_template/screens/cart/cart_screen.dart';
+import 'package:get/get.dart';
+import '../../screens/account/account_screen.dart';
+import '../../screens/another_screen.dart';
 import '../home/home_screen.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/views/menu/menu_screen.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/bottom_bar/custom_bottom_nav_bar.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/bottom_bar/custom_bottom_sheet.dart';
+import '../../screens/menu/menu_screen.dart';
+import '../../widgets/bottom_bar/custom_bottom_nav_bar.dart';
+import '../../widgets/bottom_bar/custom_bottom_sheet.dart';
 import '../../utils/constants/constants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
-class BottomBar extends StatelessWidget {
+class BottomBar extends GetView<BottomBarController> {
   BottomBar({super.key});
 
   List<Widget> pages = [
-    const HomeScreen(),
+    // const HomeScreen(),
     const AccountScreen(),
     const AnotherScreen(appBarTitle: 'More Screen'),
     const CartScreen(),
@@ -29,102 +29,92 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<UserCubit>(context).getUserData();
-    context.read<CartBloc>().add(GetCartPressed());
+    var controllerBottomBar = Get.put(BottomBarController());
+    var controllerUser = Get.put(UserController());
+    var controllerCart = Get.put(CartController());
+    controllerUser.getUserData();
+    controllerCart.onGetCartHandler();
 
-    return BlocBuilder<BottomBarBloc, BottomBarState>(
-        builder: (context, state) {
-      if (state is BottomBarMoreClickedState) {
-        return Scaffold(
-            body: Scaffold(
-              body: GestureDetector(
-                onTap: () {
-                  BlocProvider.of<BottomBarBloc>(context)
-                      .add(BottomBarMoreClickedEvent(state.index, false));
-                  context
-                      .read<BottomBarBloc>()
-                      .add(BottomBarClickedEvent(index: lastIndex));
-                },
-                child: Stack(
-                  children: [
-                    pages[lastIndex],
-                    Container(
-                      color: Colors.black87.withOpacity(0.5),
-                    )
-                  ],
-                ),
+    // return controllerBottomBar.obx((state) {
+    if (controllerBottomBar.bottomBarMoreClickedIndex.value != null &&
+        controllerBottomBar.isOpen.value != null) {
+      return Scaffold(
+          body: Scaffold(
+            body: GestureDetector(
+              onTap: () {
+                controllerBottomBar.onBotttomBarMoreClickedEvent(
+                    controllerBottomBar.bottomBarMoreClickedIndex.value, false);
+                controllerBottomBar.bottomBarIndex.value = lastIndex;
+              },
+              child: Stack(
+                children: [
+                  pages[lastIndex],
+                  Container(
+                    color: Colors.black87.withOpacity(0.5),
+                  )
+                ],
               ),
             ),
-            bottomSheet: state.isOpen
-                ? BottomSheet(
-                    backgroundColor: const Color(0xffffffff),
-                    shadowColor: Colors.white,
-                    dragHandleColor: const Color(0xffDDDDDD),
-                    dragHandleSize: const Size(50, 4),
-                    enableDrag: false,
-                    showDragHandle: true,
-                    constraints:
-                        const BoxConstraints(minHeight: 400, maxHeight: 400),
-                    onClosing: () {},
-                    builder: (context) {
-                      return const CustomBottomSheet();
-                    })
-                : null,
-            bottomNavigationBar: CustomBottomNavBar(
-              currentIndex: state.index,
-              bottomNavBarList: items(index: state.index, isOpen: state.isOpen),
-              onTap: (page) {
-                if (page == 2) {
-                  if (state.isOpen) {
-                    BlocProvider.of<BottomBarBloc>(context)
-                        .add(BottomBarMoreClickedEvent(page, false));
-                    context
-                        .read<BottomBarBloc>()
-                        .add(BottomBarClickedEvent(index: lastIndex));
-                  } else {
-                    BlocProvider.of<BottomBarBloc>(context)
-                        .add(BottomBarMoreClickedEvent(page, true));
-                  }
+          ),
+          bottomSheet: controllerBottomBar.isOpen.value!
+              ? BottomSheet(
+                  backgroundColor: const Color(0xffffffff),
+                  shadowColor: Colors.white,
+                  dragHandleColor: const Color(0xffDDDDDD),
+                  dragHandleSize: const Size(50, 4),
+                  enableDrag: false,
+                  showDragHandle: true,
+                  constraints:
+                      const BoxConstraints(minHeight: 400, maxHeight: 400),
+                  onClosing: () {},
+                  builder: (context) {
+                    return const CustomBottomSheet();
+                  })
+              : null,
+          bottomNavigationBar: CustomBottomNavBar(
+            currentIndex: controllerBottomBar.bottomBarMoreClickedIndex.value!,
+            bottomNavBarList: items(
+                index: controllerBottomBar.bottomBarMoreClickedIndex.value!,
+                isOpen: controllerBottomBar.isOpen.value!),
+            onTap: (page) {
+              if (page == 2) {
+                if (controllerBottomBar.isOpen.value!) {
+                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, false);
+                  controllerBottomBar.bottomBarIndex.value = lastIndex;
                 } else {
-                  lastIndex = page;
-
-                  context
-                      .read<BottomBarBloc>()
-                      .add(BottomBarClickedEvent(index: page));
+                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, true);
                 }
-              },
-            ));
-      }
-      if (state is BottomBarPageState) {
-        return Scaffold(
-            body: pages[state.index],
-            bottomNavigationBar: CustomBottomNavBar(
-              currentIndex: state.index,
-              bottomNavBarList: items(index: state.index),
-              onTap: (page) {
-                if (page == 2) {
-                  if (isOpen) {
-                    BlocProvider.of<BottomBarBloc>(context)
-                        .add(BottomBarMoreClickedEvent(page, false));
-                    context
-                        .read<BottomBarBloc>()
-                        .add(BottomBarClickedEvent(index: lastIndex));
-                  } else {
-                    BlocProvider.of<BottomBarBloc>(context)
-                        .add(BottomBarMoreClickedEvent(page, true));
-                  }
+              } else {
+                lastIndex = page;
+                controllerBottomBar.bottomBarIndex.value = page;
+              }
+            },
+          ));
+    }
+    if (controllerBottomBar.bottomBarIndex.value != null) {
+      return Scaffold(
+          body: pages[controllerBottomBar.bottomBarIndex.value!],
+          bottomNavigationBar: CustomBottomNavBar(
+            currentIndex: controllerBottomBar.bottomBarIndex.value!,
+            bottomNavBarList:
+                items(index: controllerBottomBar.bottomBarIndex.value!),
+            onTap: (page) {
+              if (page == 2) {
+                if (isOpen) {
+                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, false);
+                  controllerBottomBar.bottomBarIndex.value = lastIndex;
                 } else {
-                  lastIndex = page;
-
-                  context
-                      .read<BottomBarBloc>()
-                      .add(BottomBarClickedEvent(index: page));
+                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, true);
                 }
-              },
-            ));
-      }
-      return const SizedBox();
-    });
+              } else {
+                lastIndex = page;
+                controllerBottomBar.bottomBarIndex.value = page;
+              }
+            },
+          ));
+    }
+    return const SizedBox();
+    // });
   }
 
   List<BottomNavigationBarItem> items(
@@ -176,6 +166,7 @@ class BottomBar extends StatelessWidget {
       required String label,
       double height = 20,
       double width = 20}) {
+    var controllerCart = Get.put(CartController());
     return BottomNavigationBarItem(
         icon: Column(
           children: [
@@ -208,9 +199,14 @@ class BottomBar extends StatelessWidget {
                         top: 0,
                         left: 13,
                         child: Builder(builder: (context) {
-                          CartState state = context.watch<CartBloc>().state;
-                          if (state is CartProductSuccessS) {
-                            int cartLength = state.cartProducts.length;
+                          if (controllerCart.total.value != null &&
+                              controllerCart.cartProducts.value != null &&
+                              controllerCart.productsQuantity.value != null &&
+                              controllerCart.averageRatingList.value != null &&
+                              controllerCart.saveForLaterProducts.value !=
+                                  null) {
+                            int cartLength =
+                                controllerCart.cartProducts.value!.length;
 
                             return Text(
                               cartLength.toString(),

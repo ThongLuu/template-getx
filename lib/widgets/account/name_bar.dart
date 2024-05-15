@@ -1,8 +1,8 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 // import '../../../../utils/utils.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+// // import 'package:flutter_bloc/flutter_bloc.dart';
+// // import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 // class NameBar extends StatelessWidget {
 //   const NameBar({super.key});

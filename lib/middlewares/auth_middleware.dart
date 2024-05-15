@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 
 import '../routes/app_pages.dart';
 import '../services/auth_api_service.dart';
@@ -9,7 +10,8 @@ class AuthMiddleware extends GetMiddleware {
 
   @override
   RouteSettings? redirect(String? route) {
-    if (_authenticationService.sessionIsEmpty()) {
+    int exists = Hive.box('user').length;
+    if (exists==0) {
       return RouteSettings(name: Routes.LOGIN);
     }
   }

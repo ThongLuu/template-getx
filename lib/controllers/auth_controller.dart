@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter_template/models/user.dart';
 import 'package:get/get.dart';
 import 'package:oauth2/oauth2.dart';
 
@@ -12,13 +13,15 @@ class AuthController extends GetxController {
 
   AuthController(this._authenticationService);
 
-  Future<Credentials?> signIn(String email, String password) async {
+  final AuthApiService authApis = AuthApiService();
+
+  Future<User?> signIn(String email, String password) async {
     try {
       log('Enter Signin');
-      return await _authenticationService.authGrantPassword(email, password);
+      return await authApis.signInUser(email, password);
       // log('is logged in : ${crednetials!.accessToken}');
     } catch (e) {
-      // printLog(e);
+      print(e);
       printError(info: e.toString());
       rethrow;
     }
@@ -58,9 +61,9 @@ class AuthController extends GetxController {
 
   Credentials? tokenCredentials() => _authenticationService.credentials;
 
-  void signOut() async {
-    _authenticationService.removeCredentails();
-  }
+  // void signOut() async {
+  //   _authenticationService.removeCredentails();
+  // }
 
   bool isAuthenticated() {
     return !_authenticationService.sessionIsExpired();

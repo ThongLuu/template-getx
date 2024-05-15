@@ -1,8 +1,11 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_template/models/user.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 import '../routes/app_pages.dart';
@@ -12,8 +15,14 @@ import 'controllers/auth_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter("v1");
+
+  Hive.registerAdapter<User>(UserAdapter());
+
+  await Hive.openBox('user');
   await initializeApp();
   await GetStorage.init();
+  await dotenv.load(fileName: "config.env");
   runApp(const MyApp());
 }
 

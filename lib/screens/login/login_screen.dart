@@ -286,8 +286,8 @@ class LoginScreen extends GetView<LoginController> {
                                                             message:
                                                                 'Login...');
                                                         try {
-                                                          // await controller
-                                                          //     .login();
+                                                          await controller
+                                                              .login();
                                                           Get.offAllNamed(Routes
                                                               .HOMESCREEN);
                                                         } catch (err, _) {

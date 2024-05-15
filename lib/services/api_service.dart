@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter_template/utils/constants/strings.dart';
 import 'package:get/get.dart';
 import 'package:oauth2/oauth2.dart';
 
@@ -10,7 +11,7 @@ import 'auth_api_service.dart';
 
 class ApiService extends GetConnect {
   bool isLoginRequest(request) {
-    return (ConfigAPI.baseUrl + AuthApiService.signInUrl ==
+    return (ConfigAPI.baseUrl + signInUrl ==
         request.url.toString());
   }
 

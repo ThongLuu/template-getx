@@ -83,7 +83,7 @@ class SignupScreen extends GetView<SignupController> {
                           controller.signupFormKey.currentState!.save();
                           log('response signup');
 
-                          Get.offAllNamed(Routes.HOMESCREEN);
+                          Get.toNamed(Routes.HOMESCREEN);
                         } catch (err, _) {
                           printError(info: err.toString());
                           LoadingOverlay.hide();

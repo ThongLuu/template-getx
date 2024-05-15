@@ -53,7 +53,7 @@ class LoginWebviewController extends GetxController {
 
         await _authApiService.saveCredentails(client!.credentials);
 
-        Get.offAllNamed(Routes.HOMESCREEN);
+        Get.toNamed(Routes.HOMESCREEN);
 
         return NavigationDecision.prevent;
       }

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter_template/models/user.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import '../config/config_api.dart';
 import 'api_service.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
@@ -10,10 +12,14 @@ import 'package:oauth2/oauth2.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../mixins/helper_mixin.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../../utils/constants/strings.dart';
 
 class AuthApiService extends ApiService {
-  static String signUpUrl = '/jsonapi/user/register';
-  static String signInUrl = '/oauth/token';
+  // static String signUpUrl = '/jsonapi/user/register';
+  // static String signInUrl = '/oauth/token';
 
   // These URLs are endpoints that are provided by the authorization
 // server. They're usually included in the server's documentation of its
@@ -51,6 +57,8 @@ class AuthApiService extends ApiService {
   Credentials? credentials;
   late AuthorizationCodeGrant _grant;
   oauth2.Client? client;
+
+  static final cacheUser = Hive.box('user');
 
   initCredentials() async {
     _directory = await getApplicationDocumentsDirectory();
@@ -169,6 +177,48 @@ class AuthApiService extends ApiService {
       // printLog(e);
       printError(info: e.toString());
       rethrow;
+    }
+  }
+
+  Future<User> signInUser(String email, String password) async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse(signInUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(
+          {
+            'email': email,
+            'password': password,
+          },
+        ),
+      );
+      if (res.statusCode == 200) {
+        User user = User.fromMap(jsonDecode(res.body));
+
+        var cache = User(
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          password: user.password,
+          address: user.address,
+          type: user.type,
+          token: user.token,
+          cart: user.cart,
+          saveForLater: user.saveForLater,
+          keepShoppingFor: user.keepShoppingFor,
+          wishList: user.wishList,
+        );
+
+        await cacheUser.add(cache);
+
+        return user;
+      } else {
+        throw jsonDecode(res.body)['messages'];
+      }
+    } catch (e) {
+      throw Exception(e.toString());
     }
   }
 

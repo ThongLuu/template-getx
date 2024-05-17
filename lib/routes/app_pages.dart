@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:flutter_template/bindings/bottom_bar_biding.dart';
 import 'package:flutter_template/bindings/browsing_history_biding.dart';
 import 'package:flutter_template/bindings/cart_biding.dart';
+import 'package:flutter_template/bindings/home_view_biding.dart';
 import 'package:flutter_template/bindings/midmain_biding.dart';
 import 'package:flutter_template/screens/account/browsing_history.dart';
 import 'package:flutter_template/screens/bottom_navigation_bar/bottom_bar.dart';
 import 'package:flutter_template/screens/cart/cart_screen.dart';
+import 'package:flutter_template/screens/home/home_view.dart';
 import 'package:flutter_template/screens/mid_main/mid_main_screen.dart';
 
 import '../bindings/home_binding.dart';
@@ -27,16 +29,10 @@ part 'app_routes.dart';
 class AppPages {
   static List<GetPage> pages = [
     GetPage(
-        name: Routes.MIDMAINSCREENROUTE,
-        page: () => MidMainScreen(),
-        binding: MidMainBinding(),
-        middlewares: [AuthMiddleware()],
-        transition: Transition.fadeIn),
-    GetPage(
         name: Routes.HOMESCREEN,
-        page: () => const HomeScreen(),
-        binding: HomeBinding(),
-        // middlewares: [AuthMiddleware()],
+        page: () => HomeView(),
+        binding: HomeViewBinding(),
+        middlewares: [AuthMiddleware()],
         transition: Transition.fadeIn),
     GetPage(
         name: Routes.LOGIN,

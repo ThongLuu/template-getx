@@ -17,7 +17,7 @@ class BottomBar extends GetView<BottomBarController> {
   BottomBar({super.key});
 
   List<Widget> pages = [
-    // const HomeScreen(),
+    const HomeScreen(),
     const AccountScreen(),
     const AnotherScreen(appBarTitle: 'More Screen'),
     const CartScreen(),

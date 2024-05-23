@@ -4,7 +4,7 @@ import 'package:flutter_template/services/category_products_service.dart';
 import 'package:get/get.dart';
 
 class CartOffers2Controller extends GetxController with StateMixin {
-  var productList = Rxn<List<Product>>();
+  var productList = Rxn<List<Product>>([]);
   var averageRatingList = Rxn<List<double>>();
   var errorString = ('').obs;
 

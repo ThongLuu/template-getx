@@ -74,8 +74,11 @@ class UserApi {
     }
   }
 
-  Future<http.Response> getCart() async {
+  Future<List<List>> getCart() async {
     final token = await getToken();
+
+    List<Product> cartProducts = [];
+    List<int> productQuantity = [];
 
     try {
       http.Response res = await client.get(
@@ -85,7 +88,23 @@ class UserApi {
           'x-auth-token': token,
         },
       );
-      return res;
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          cartProducts.add(
+            Product.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i]['product'],
+              ),
+            ),
+          );
+          productQuantity.add(
+            jsonDecode(res.body)[i]['quantity'],
+          );
+        }
+        return [cartProducts, productQuantity];
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
     } catch (e) {
       throw Exception(e.toString());
     }

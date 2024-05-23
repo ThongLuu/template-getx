@@ -41,7 +41,7 @@ class TopButtons extends StatelessWidget {
                     await Hive.box('user').clear();
 
                     if (context.mounted) {
-                      Get.toNamed(Routes.AUTHROUTE);
+                      Get.toNamed(Routes.LOGIN);
                     }
                   } catch (e) {
                     if (context.mounted) {

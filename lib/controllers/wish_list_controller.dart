@@ -4,7 +4,7 @@ import 'package:flutter_template/services/user_service.dart';
 import 'package:get/get.dart';
 
 class WishListController extends GetxController with StateMixin {
-  var wishList = Rxn<List<Product>>();
+  var wishList = Rxn<List<Product>>([]);
   var averageRatingList = Rxn<List<double>>();
   var getWishListErrorS = ('').obs;
   var wishListErrorS = ('').obs;

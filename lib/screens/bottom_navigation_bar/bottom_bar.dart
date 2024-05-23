@@ -35,86 +35,92 @@ class BottomBar extends GetView<BottomBarController> {
     controllerUser.getUserData();
     controllerCart.onGetCartHandler();
 
-    // return controllerBottomBar.obx((state) {
-    if (controllerBottomBar.bottomBarMoreClickedIndex.value != null &&
-        controllerBottomBar.isOpen.value != null) {
-      return Scaffold(
-          body: Scaffold(
-            body: GestureDetector(
-              onTap: () {
-                controllerBottomBar.onBotttomBarMoreClickedEvent(
-                    controllerBottomBar.bottomBarMoreClickedIndex.value, false);
-                controllerBottomBar.bottomBarIndex.value = lastIndex;
-              },
-              child: Stack(
-                children: [
-                  pages[lastIndex],
-                  Container(
-                    color: Colors.black87.withOpacity(0.5),
-                  )
-                ],
+    return Obx(() => controllerBottomBar.bottomBarMoreClickedIndex.value !=
+                null &&
+            controllerBottomBar.isOpen.value != null
+        ? Scaffold(
+            body: Scaffold(
+              body: GestureDetector(
+                onTap: () {
+                  controllerBottomBar.onBotttomBarMoreClickedEvent(
+                      controllerBottomBar.bottomBarMoreClickedIndex.value,
+                      false);
+                  controllerBottomBar.onBottomBarClickedHandler(lastIndex);
+                },
+                child: Stack(
+                  children: [
+                    pages[lastIndex],
+                    Container(
+                      color: controllerBottomBar.isOpen.value==true? Colors.black87.withOpacity(0.5):Colors.black87.withOpacity(0),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          bottomSheet: controllerBottomBar.isOpen.value!
-              ? BottomSheet(
-                  backgroundColor: const Color(0xffffffff),
-                  shadowColor: Colors.white,
-                  dragHandleColor: const Color(0xffDDDDDD),
-                  dragHandleSize: const Size(50, 4),
-                  enableDrag: false,
-                  showDragHandle: true,
-                  constraints:
-                      const BoxConstraints(minHeight: 400, maxHeight: 400),
-                  onClosing: () {},
-                  builder: (context) {
-                    return const CustomBottomSheet();
-                  })
-              : null,
-          bottomNavigationBar: CustomBottomNavBar(
-            currentIndex: controllerBottomBar.bottomBarMoreClickedIndex.value!,
-            bottomNavBarList: items(
-                index: controllerBottomBar.bottomBarMoreClickedIndex.value!,
-                isOpen: controllerBottomBar.isOpen.value!),
-            onTap: (page) {
-              if (page == 2) {
-                if (controllerBottomBar.isOpen.value!) {
-                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, false);
-                  controllerBottomBar.bottomBarIndex.value = lastIndex;
+            bottomSheet: controllerBottomBar.isOpen.value == true
+                ? BottomSheet(
+                    backgroundColor: const Color(0xffffffff),
+                    shadowColor: Colors.white,
+                    dragHandleColor: const Color(0xffDDDDDD),
+                    dragHandleSize: const Size(50, 4),
+                    enableDrag: false,
+                    showDragHandle: true,
+                    constraints:
+                        const BoxConstraints(minHeight: 400, maxHeight: 400),
+                    onClosing: () {},
+                    builder: (context) {
+                      return const CustomBottomSheet();
+                    })
+                : null,
+            bottomNavigationBar: CustomBottomNavBar(
+              currentIndex:
+                  controllerBottomBar.bottomBarMoreClickedIndex.value!,
+              bottomNavBarList: items(
+                  index: controllerBottomBar.bottomBarMoreClickedIndex.value!,
+                  isOpen: controllerBottomBar.isOpen.value!),
+              onTap: (page) {
+                if (page == 2) {
+                  if (controllerBottomBar.isOpen.value == true) {
+                    controllerBottomBar.onBotttomBarMoreClickedEvent(
+                        page, false);
+                    controllerBottomBar.onBottomBarClickedHandler(lastIndex);
+                  } else {
+                    controllerBottomBar.onBotttomBarMoreClickedEvent(
+                        page, true);
+                  }
                 } else {
-                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, true);
-                }
-              } else {
-                lastIndex = page;
-                controllerBottomBar.bottomBarIndex.value = page;
-              }
-            },
-          ));
-    }
-    if (controllerBottomBar.bottomBarIndex.value != null) {
-      return Scaffold(
-          body: pages[controllerBottomBar.bottomBarIndex.value!],
-          bottomNavigationBar: CustomBottomNavBar(
-            currentIndex: controllerBottomBar.bottomBarIndex.value!,
-            bottomNavBarList:
-                items(index: controllerBottomBar.bottomBarIndex.value!),
-            onTap: (page) {
-              if (page == 2) {
-                if (isOpen) {
+                  lastIndex = page;
                   controllerBottomBar.onBotttomBarMoreClickedEvent(page, false);
-                  controllerBottomBar.bottomBarIndex.value = lastIndex;
-                } else {
-                  controllerBottomBar.onBotttomBarMoreClickedEvent(page, true);
+                  controllerBottomBar.onBottomBarClickedHandler(page);
                 }
-              } else {
-                lastIndex = page;
-                controllerBottomBar.bottomBarIndex.value = page;
-              }
-            },
-          ));
-    }
-    return const SizedBox();
-    // });
+              },
+            ))
+        : controllerBottomBar.bottomBarIndex.value != null
+            ? Scaffold(
+                body: pages[controllerBottomBar.bottomBarIndex.value!],
+                bottomNavigationBar: CustomBottomNavBar(
+                  currentIndex: controllerBottomBar.bottomBarIndex.value!,
+                  bottomNavBarList:
+                      items(index: controllerBottomBar.bottomBarIndex.value!),
+                  onTap: (page) {
+                    if (page == 2) {
+                      if (isOpen) {
+                        controllerBottomBar.onBotttomBarMoreClickedEvent(
+                            page, false);
+                        controllerBottomBar
+                            .onBottomBarClickedHandler(lastIndex);
+                      } else {
+                        controllerBottomBar.onBotttomBarMoreClickedEvent(
+                            page, true);
+                      }
+                    } else {
+                      lastIndex = page;
+                      controllerBottomBar
+                            .onBottomBarClickedHandler(page);
+                    }
+                  },
+                ))
+            : const SizedBox());
   }
 
   List<BottomNavigationBarItem> items(

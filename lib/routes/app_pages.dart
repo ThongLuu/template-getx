@@ -5,7 +5,10 @@ import 'package:flutter_template/bindings/browsing_history_biding.dart';
 import 'package:flutter_template/bindings/cart_biding.dart';
 import 'package:flutter_template/bindings/home_view_biding.dart';
 import 'package:flutter_template/bindings/midmain_biding.dart';
+import 'package:flutter_template/bindings/wish_list_biding.dart';
 import 'package:flutter_template/screens/account/browsing_history.dart';
+import 'package:flutter_template/screens/account/wish_list_screen.dart';
+import 'package:flutter_template/screens/another_screen.dart';
 import 'package:flutter_template/screens/bottom_navigation_bar/bottom_bar.dart';
 import 'package:flutter_template/screens/cart/cart_screen.dart';
 import 'package:flutter_template/screens/home/home_view.dart';
@@ -39,21 +42,11 @@ class AppPages {
         page: () => const LoginScreen(),
         binding: LoginBinding(),
         transition: Transition.noTransition),
-    // GetPage(
-    //     name: Routes.LOGIN_WEBVIEW,
-    //     page: () => const LoginWebviewScreen(),
-    //     binding: LoginWebviewBinding(),
-    //     transition: Transition.noTransition),
     GetPage(
         name: Routes.SIGNUP,
         page: () => const SignupScreen(),
         binding: SignupBinding(),
         transition: Transition.noTransition),
-    // GetPage(
-    //     name: Routes.AUTHROUTE,
-    //     page: () => const SignupScreen(),
-    //     binding: SignupBinding(),
-    //     transition: Transition.noTransition),
     GetPage(
         name: Routes.BOTTOMBARROUTE,
         page: () => BottomBar(),
@@ -68,6 +61,18 @@ class AppPages {
         name: Routes.CARTSCREENSCREENROUTE,
         page: () => const CartScreen(),
         binding: CartBinding(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: Routes.YOURWISHLISTSCREENROUTE,
+        page: () => const WishListScreen(),
+        binding: WishListBinding(),
+        transition: Transition.noTransition),
+    GetPage(
+        name: Routes.ANOTHERSCREENROUTE,
+        page: () {
+          final String appBarTitle = Get.parameters['appBarTitle']!;
+          return AnotherScreen(appBarTitle: appBarTitle);
+        },
         transition: Transition.noTransition),
   ];
 }

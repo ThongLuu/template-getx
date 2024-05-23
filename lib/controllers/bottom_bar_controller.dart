@@ -5,12 +5,14 @@ class BottomBarController extends GetxController {
   var bottomBarMoreClickedIndex = RxnInt();
   var isOpen = RxnBool();
 
-  void onBottomBarClickedHandler(event, emit) {
-    bottomBarIndex.value = event.index;
+  void onBottomBarClickedHandler(index) {
+    bottomBarIndex.value = index;
+    update();
   }
 
-  void onBotttomBarMoreClickedEvent(event, emit) {
-    bottomBarMoreClickedIndex.value = event.index;
-    isOpen.value = event.isOpen;
+  void onBotttomBarMoreClickedEvent(index, open) {
+    bottomBarMoreClickedIndex.value = index;
+    isOpen.value = open;
+    update();
   }
 }

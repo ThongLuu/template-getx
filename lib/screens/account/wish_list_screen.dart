@@ -11,13 +11,13 @@ class WishListScreen extends GetView<WishListController> {
 
   @override
   Widget build(BuildContext context) {
-    var controllerWishListController = Get.put(WishListController());
-
-    return controllerWishListController.obx((state) {
-      if (controllerWishListController.getWishListErrorS.value.isEmpty == false) {
-        showSnackBar(context, controllerWishListController.getWishListErrorS.value);
-      }
-      return Scaffold(
+    var controllerWishList = Get.put(WishListController());
+    controllerWishList.getWishList();
+    // return controllerWishListController.obx((state) {
+    //   if (controllerWishListController.getWishListErrorS.value.isEmpty == false) {
+    //     showSnackBar(context, controllerWishListController.getWishListErrorS.value);
+    //   }
+      return Obx(() => Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(60),
           child: CustomAppBar(),
@@ -36,34 +36,34 @@ class WishListScreen extends GetView<WishListController> {
                       color: Color.fromRGBO(0, 0, 0, 0.867)),
                 ),
                 const SizedBox(height: 10),
-                controllerWishListController.wishList.value!.isNotEmpty &&
-                        controllerWishListController.averageRatingList.value!.isNotEmpty
+                controllerWishList.wishList.value!.isNotEmpty &&
+                        controllerWishList.averageRatingList.value!.isNotEmpty
                     ? ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.wishList.length,
+                        itemCount: controllerWishList.wishList.value!.length,
                         itemBuilder: ((context, index) {
-                          Product product = state.wishList[index];
-                          double averageRating = state.averageRatingList[index];
+                          Product product = controllerWishList.wishList.value![index];
+                          double averageRating = controllerWishList.averageRatingList.value![index];
 
-                          // return SingleWishListProduct(
-                          //   product: product,
-                          //   deliveryDate: getDeliveryDate(),
-                          //   averageRating: averageRating,
-                          // );
+                          return SingleWishListProduct(
+                            product: product,
+                            deliveryDate: getDeliveryDate(),
+                            averageRating: averageRating,
+                          );
                         }))
                     : const SizedBox()
               ],
             ),
           ),
         ),
-      );
-    },
-        onLoading: SizedBox(
-          height: MediaQuery.sizeOf(context).height / 1.4,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ));
+      ));
+    // },
+    //     onLoading: SizedBox(
+    //       height: MediaQuery.sizeOf(context).height / 1.4,
+    //       child: const Center(
+    //         child: CircularProgressIndicator(),
+    //       ),
+    //     ));
   }
 }

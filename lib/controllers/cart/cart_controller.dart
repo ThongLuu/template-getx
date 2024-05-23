@@ -24,21 +24,25 @@ class CartController extends GetxController with StateMixin {
   Future<List<dynamic>> tryBlockCode(
       {required dynamic customUserRepository}) async {
     List<List> items;
+    List<Product> cartProducts;
+    List<Product> saveForLaterProducts;
+    List<int> productsQuantity;
+    List<double> averageRatingList = [];
     double rating;
     double sum = 0;
 
     items = await customUserRepository;
-    cartProducts.value = items[0] as List<Product>;
-    productsQuantity.value = items[1] as List<int>;
+    cartProducts = items[0] as List<Product>;
+    productsQuantity = items[1] as List<int>;
 
-    saveForLaterProducts.value = await userApis.getSaveForLater();
+    saveForLaterProducts = await userApis.getSaveForLater();
 
-    for (int i = 0; i < cartProducts.value!.length; i++) {
-      sum += cartProducts.value![i].price * productsQuantity.value![i];
+    for (int i = 0; i < cartProducts.length; i++) {
+      sum += cartProducts[i].price * productsQuantity[i];
 
-      rating = await accountApis.getAverageRating(cartProducts.value![i].id!);
+      rating = await accountApis.getAverageRating(cartProducts[i].id!);
 
-      averageRatingList.value!.add(rating);
+      averageRatingList.add(rating);
     }
 
     return [
@@ -56,11 +60,11 @@ class CartController extends GetxController with StateMixin {
       List<dynamic> items =
           await tryBlockCode(customUserRepository: await userApis.getCart());
 
-      total = items[0];
-      cartProducts = items[1];
-      averageRatingList = items[2];
-      productsQuantity = items[3];
-      saveForLaterProducts = items[4];
+      total.value = items[0];
+      cartProducts.value = items[1];
+      averageRatingList.value = items[2];
+      productsQuantity.value = items[3];
+      saveForLaterProducts.value = items[4];
 
       change(null, status: RxStatus.success());
     } catch (e) {

@@ -16,438 +16,527 @@ class AccountScreen extends GetView<FetchAccountScreenDataController> {
 
   @override
   Widget build(BuildContext context) {
-    var controllerFetchAccountScreenDataController = Get.put(FetchAccountScreenDataController());
+    var controllerFetchAccountScreenDataController =
+        Get.put(FetchAccountScreenDataController());
     controllerFetchAccountScreenDataController.getAccountScreenData();
-    return controllerFetchAccountScreenDataController.obx((state) {
-      if (controllerFetchAccountScreenDataController.errorString.value.isEmpty == false) {
-        showSnackBar(context, controllerFetchAccountScreenDataController.errorString.value);
-      }
-      return Scaffold(
-        appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: AccuntScreenAppBar(),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 180,
-                width: MediaQuery.sizeOf(context).width,
-                child: Stack(
-                  children: [
-                    // const Positioned(
-                    //   top: 0,
-                    //   child: NameBar(),
-                    // ),
-                    Positioned(
-                        top: 50,
+    return Obx(() => Scaffold(
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(50),
+            child: AccuntScreenAppBar(),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 180,
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Stack(
+                    children: [
+                      // const Positioned(
+                      //   top: 0,
+                      //   child: NameBar(),
+                      // ),
+                      Positioned(
+                          top: 50,
+                          child: Container(
+                            height: 80,
+                            width: MediaQuery.sizeOf(context).width,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [
+                                    Colors.white.withOpacity(0.1),
+                                    Colors.white.withOpacity(0.9)
+                                  ],
+                                  stops: const [
+                                    0,
+                                    0.45
+                                  ],
+                                  begin: AlignmentDirectional.topCenter,
+                                  end: Alignment.bottomCenter),
+                            ),
+                          )),
+                      Positioned(
+                        top: 60,
                         child: Container(
-                          height: 80,
-                          width: MediaQuery.sizeOf(context).width,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                colors: [
-                                  Colors.white.withOpacity(0.1),
-                                  Colors.white.withOpacity(0.9)
-                                ],
-                                stops: const [
-                                  0,
-                                  0.45
-                                ],
-                                begin: AlignmentDirectional.topCenter,
-                                end: Alignment.bottomCenter),
-                          ),
-                        )),
-                    Positioned(
-                      top: 60,
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          height: 200,
-                          width: MediaQuery.sizeOf(context).width,
-                          child: const TopButtons()),
-                    ),
-                  ],
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            height: 200,
+                            width: MediaQuery.sizeOf(context).width,
+                            child: const TopButtons()),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // your orders
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: controllerFetchAccountScreenDataController.emptyStringMessage.value!.isNotEmpty
-                      ? SizedBox(
-                          height: 150,
-                          child: Center(
-                            child: Text(state.emptyStringMessage),
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            state.ordersList.isEmpty
-                                ? const SizedBox()
-                                : Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Your Orders',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Get.toNamed(
-                                                  Routes.YOURORDERSSCREENROUTE);
-                                            },
-                                            child: Text(
-                                              'See all',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 14,
-                                                  color: Constants
-                                                      .selectedNavBarColor),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 170,
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: state.ordersList.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  Get.toNamed(
-                                                      Routes
-                                                          .ORDERDETAILSSCREENROUTE,
-                                                      parameters: state
-                                                          .ordersList[index]);
-                                                },
-                                                child: Container(
-                                                    width: 200,
-                                                    margin:
-                                                        const EdgeInsets.all(8),
-                                                    padding:
-                                                        const EdgeInsets.all(4),
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Colors.black12,
-                                                          width: 1.5),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                    child: state
-                                                                .ordersList[
-                                                                    index]
-                                                                .products
-                                                                .length ==
-                                                            1
-                                                        ? SingleProduct(
-                                                            image: state
-                                                                .ordersList[
-                                                                    index]
-                                                                .products[0]
-                                                                .images[0],
-                                                          )
-                                                        : Row(
-                                                            children: [
-                                                              SingleProduct(
-                                                                image: state
-                                                                    .ordersList[
-                                                                        index]
-                                                                    .products[0]
-                                                                    .images[0],
-                                                              ),
-                                                              Text(
-                                                                '+ ${state.ordersList[index].products.length - 1}',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 16,
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade500,
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )),
-                                              );
-                                            }),
-                                      ),
-                                      const DividerWithSizedBox(
-                                        thickness: 4,
-                                        sB1Height: 15,
-                                        sB2Height: 0,
-                                      ),
-                                    ],
-                                  ),
-
-                            // Keep Shopping For
-                            state.keepShoppingForList.isEmpty
-                                ? const SizedBox()
-                                : Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Keep shopping for',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Get.toNamed(Routes
-                                                  .BROWSINGHISTORYSCREENROUTE);
-                                            },
-                                            child: Text(
-                                              'Browsing history',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 14,
-                                                  color: Constants
-                                                      .selectedNavBarColor),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          mainAxisSpacing: 8,
-                                          crossAxisSpacing: 15,
-                                          childAspectRatio: state
-                                                      .keepShoppingForList
-                                                      .length ==
-                                                  1
-                                              ? 2.0
-                                              : state.keepShoppingForList
-                                                          .length ==
-                                                      3
-                                                  ? 0.7
-                                                  : 1.15,
-                                          crossAxisCount: state
-                                                      .keepShoppingForList
-                                                      .length >=
-                                                  4
-                                              ? 2
-                                              : state.keepShoppingForList
-                                                      .isEmpty
-                                                  ? 1
-                                                  : state.keepShoppingForList
-                                                      .length,
-                                        ),
-                                        itemCount: state.keepShoppingForList
-                                                    .length >=
-                                                4
-                                            ? 4
-                                            : state.keepShoppingForList.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  Routes
-                                                      .CATEGORYPRODUCTSSCREENROUTE,
-                                                  parameters: {
-                                                    "category": state
-                                                        .keepShoppingForList[
-                                                            index]
-                                                        .category
-                                                  });
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                // your orders
+                Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child:
+                        controllerFetchAccountScreenDataController
+                                .errorString.value.isNotEmpty
+                            ? SnackBar(
+                                content: Text(
+                                    controllerFetchAccountScreenDataController
+                                        .errorString.value))
+                            :
+                        controllerFetchAccountScreenDataController
+                                .emptyStringMessage.value.isNotEmpty
+                            ? SizedBox(
+                                height: 150,
+                                child: Center(
+                                  child: Text(
+                                      controllerFetchAccountScreenDataController
+                                          .emptyStringMessage.value),
+                                ),
+                              )
+                            : Column(
+                                children: [
+                                  controllerFetchAccountScreenDataController
+                                              .ordersList.value ==
+                                          null
+                                      ? const SizedBox()
+                                      : Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 6),
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black12,
-                                                        width: 1.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                  ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: state
-                                                        .keepShoppingForList[
-                                                            index]
-                                                        .images[0],
-                                                    height: 110,
+                                                const Text(
+                                                  'Your Orders',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Get.toNamed(Routes
+                                                        .YOURORDERSSCREENROUTE);
+                                                  },
+                                                  child: Text(
+                                                    'See all',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 14,
+                                                        color: Constants
+                                                            .selectedNavBarColor),
                                                   ),
                                                 ),
-                                                const SizedBox(height: 5),
-                                                Text(
-                                                  state
-                                                      .keepShoppingForList[
-                                                          index]
-                                                      .category,
-                                                  style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black87),
-                                                )
                                               ],
                                             ),
-                                          );
-                                        },
-                                      ),
-                                      const DividerWithSizedBox(
-                                        thickness: 4,
-                                        sB1Height: 6,
-                                        sB2Height: 4,
-                                      ),
-                                    ],
-                                  ),
+                                            SizedBox(
+                                              height: 170,
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      controllerFetchAccountScreenDataController
+                                                          .ordersList
+                                                          .value!
+                                                          .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return InkWell(
+                                                      onTap: () {
+                                                        Get.toNamed(
+                                                            Routes
+                                                                .ORDERDETAILSSCREENROUTE,
+                                                            arguments:
+                                                                controllerFetchAccountScreenDataController
+                                                                        .ordersList
+                                                                        .value![
+                                                                    index]);
+                                                      },
+                                                      child: Container(
+                                                          width: 200,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .all(8),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: Colors
+                                                                    .black12,
+                                                                width: 1.5),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                          child: controllerFetchAccountScreenDataController
+                                                                      .ordersList
+                                                                      .value![
+                                                                          index]
+                                                                      .products
+                                                                      .length ==
+                                                                  1
+                                                              ? SingleProduct(
+                                                                  image: controllerFetchAccountScreenDataController
+                                                                      .ordersList
+                                                                      .value![
+                                                                          index]
+                                                                      .products[
+                                                                          0]
+                                                                      .images[0],
+                                                                )
+                                                              : Row(
+                                                                  children: [
+                                                                    SingleProduct(
+                                                                      image: controllerFetchAccountScreenDataController
+                                                                          .ordersList
+                                                                          .value![
+                                                                              index]
+                                                                          .products[
+                                                                              0]
+                                                                          .images[0],
+                                                                    ),
+                                                                    Text(
+                                                                      '+ ${controllerFetchAccountScreenDataController.ordersList.value![index].products.length - 1}',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            16,
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .shade500,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                    );
+                                                  }),
+                                            ),
+                                            const DividerWithSizedBox(
+                                              thickness: 4,
+                                              sB1Height: 15,
+                                              sB2Height: 0,
+                                            ),
+                                          ],
+                                        ),
 
-                            // Wish List
-                            state.wishListProducts.isEmpty
-                                ? const SizedBox()
-                                : Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text(
-                                            'Your Wish List',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                          TextButton(
-                                              onPressed: () {
-                                                Get.toNamed(Routes
-                                                    .YOURWISHLISTSCREENROUTE);
-                                              },
-                                              child: Text(
-                                                'See all',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    fontSize: 14,
-                                                    color: Constants
-                                                        .selectedNavBarColor),
-                                              ))
-                                        ],
-                                      ),
-                                      GridView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.vertical,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                  // Keep Shopping For
+                                  controllerFetchAccountScreenDataController
+                                              .keepShoppingForList.value ==
+                                          null
+                                      ? const SizedBox()
+                                      : Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Keep shopping for',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Get.toNamed(Routes
+                                                        .BROWSINGHISTORYSCREENROUTE);
+                                                  },
+                                                  child: Text(
+                                                    'Browsing history',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 14,
+                                                        color: Constants
+                                                            .selectedNavBarColor),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
                                                 mainAxisSpacing: 8,
                                                 crossAxisSpacing: 15,
-                                                childAspectRatio: state
-                                                            .wishListProducts
-                                                            .length ==
-                                                        1
-                                                    ? 2.0
-                                                    : state.wishListProducts
+                                                childAspectRatio:
+                                                    controllerFetchAccountScreenDataController
+                                                                .keepShoppingForList
+                                                                .value!
                                                                 .length ==
-                                                            3
-                                                        ? 0.7
-                                                        : 1.15,
-                                                crossAxisCount: state
-                                                            .wishListProducts
+                                                            1
+                                                        ? 2.0
+                                                        : controllerFetchAccountScreenDataController
+                                                                    .keepShoppingForList
+                                                                    .value!
+                                                                    .length ==
+                                                                3
+                                                            ? 0.7
+                                                            : 1.15,
+                                                crossAxisCount: controllerFetchAccountScreenDataController
+                                                            .keepShoppingForList
+                                                            .value!
                                                             .length >=
                                                         4
                                                     ? 2
-                                                    : state.wishListProducts
+                                                    : controllerFetchAccountScreenDataController
+                                                            .keepShoppingForList
+                                                            .value!
                                                             .isEmpty
                                                         ? 1
-                                                        : state.wishListProducts
-                                                            .length),
-                                        itemCount:
-                                            state.wishListProducts.length >= 4
-                                                ? 4
-                                                : state.wishListProducts.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  Routes
-                                                      .PRODUCTDETAILSSCREENROUTE,
-                                                  parameters: {
-                                                    "product":
-                                                        state.wishListProducts[
-                                                            index],
-                                                    "deliveryDate":
-                                                        getDeliveryDate(),
-                                                  });
-                                            },
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                        : controllerFetchAccountScreenDataController
+                                                            .keepShoppingForList
+                                                            .value!
+                                                            .length,
+                                              ),
+                                              itemCount:
+                                                  controllerFetchAccountScreenDataController
+                                                              .keepShoppingForList
+                                                              .value!
+                                                              .length >=
+                                                          4
+                                                      ? 4
+                                                      : controllerFetchAccountScreenDataController
+                                                          .keepShoppingForList
+                                                          .value!
+                                                          .length,
+                                              itemBuilder: (context, index) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        Routes
+                                                            .CATEGORYPRODUCTSSCREENROUTE,
+                                                        parameters: {
+                                                          "category":
+                                                              controllerFetchAccountScreenDataController
+                                                                  .keepShoppingForList
+                                                                  .value![index]
+                                                                  .category
+                                                        });
+                                                  },
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 7,
+                                                                horizontal: 6),
+                                                        width: double.infinity,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1.5),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              controllerFetchAccountScreenDataController
+                                                                  .keepShoppingForList
+                                                                  .value![index]
+                                                                  .images[0],
+                                                          height: 110,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Text(
+                                                        controllerFetchAccountScreenDataController
+                                                            .keepShoppingForList
+                                                            .value![index]
+                                                            .category,
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black87),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                            const DividerWithSizedBox(
+                                              thickness: 4,
+                                              sB1Height: 6,
+                                              sB2Height: 4,
+                                            ),
+                                          ],
+                                        ),
+
+                                  // Wish List
+                                  controllerFetchAccountScreenDataController
+                                              .wishListProducts.value ==
+                                          null
+                                      ? const SizedBox()
+                                      : Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 6),
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black12,
-                                                        width: 1.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                  ),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: state
-                                                        .wishListProducts[index]
-                                                        .images[0],
-                                                    height: 110,
-                                                  ),
+                                                const Text(
+                                                  'Your Wish List',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400),
                                                 ),
-                                                const SizedBox(height: 5),
-                                                Text(
-                                                  '  ${state.wishListProducts[index].name}',
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black87),
-                                                )
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Get.toNamed(Routes
+                                                          .YOURWISHLISTSCREENROUTE);
+                                                    },
+                                                    child: Text(
+                                                      'See all',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          fontSize: 14,
+                                                          color: Constants
+                                                              .selectedNavBarColor),
+                                                    ))
                                               ],
                                             ),
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  )
-                          ],
-                        )),
+                                            GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.vertical,
+                                              gridDelegate:
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      mainAxisSpacing: 8,
+                                                      crossAxisSpacing: 15,
+                                                      childAspectRatio: controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value!
+                                                                  .length ==
+                                                              1
+                                                          ? 2.0
+                                                          : controllerFetchAccountScreenDataController
+                                                                      .wishListProducts
+                                                                      .value!
+                                                                      .length ==
+                                                                  3
+                                                              ? 0.7
+                                                              : 1.15,
+                                                      crossAxisCount: controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value!
+                                                                  .length >=
+                                                              4
+                                                          ? 2
+                                                          : controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value!
+                                                                  .isEmpty
+                                                              ? 1
+                                                              : controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value!
+                                                                  .length),
+                                              itemCount:
+                                                  controllerFetchAccountScreenDataController
+                                                              .wishListProducts
+                                                              .value!
+                                                              .length >=
+                                                          4
+                                                      ? 4
+                                                      : controllerFetchAccountScreenDataController
+                                                          .wishListProducts
+                                                          .value!
+                                                          .length,
+                                              itemBuilder: (context, index) {
+                                                return InkWell(
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        Routes
+                                                            .PRODUCTDETAILSSCREENROUTE,
+                                                        arguments: {
+                                                          "product":
+                                                              controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value![index],
+                                                          "deliveryDate":
+                                                              getDeliveryDate(),
+                                                        });
+                                                  },
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                vertical: 7,
+                                                                horizontal: 6),
+                                                        width: double.infinity,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .black12,
+                                                              width: 1.5),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                        ),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              controllerFetchAccountScreenDataController
+                                                                  .wishListProducts
+                                                                  .value![index]
+                                                                  .images[0],
+                                                          height: 110,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Text(
+                                                        '  ${controllerFetchAccountScreenDataController.wishListProducts.value![index].name}',
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            fontSize: 14,
+                                                            color:
+                                                                Colors.black87),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          ],
+                                        )
+                                ],
+                              )),
 
-              const SizedBox(height: 20),
-            ],
-          ),
-        ),
-      );
-    },
-        onLoading: SizedBox(
-          height: MediaQuery.sizeOf(context).height / 1.4,
-          child: const Center(
-            child: CircularProgressIndicator(),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ));
+    // },
+    //     onLoading: SizedBox(
+    //       height: MediaQuery.sizeOf(context).height / 1.4,
+    //       child: const Center(
+    //         child: CircularProgressIndicator(),
+    //       ),
+    //     ));
   }
 }
 

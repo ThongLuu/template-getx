@@ -6,7 +6,7 @@ import 'dart:math';
 import '../../utils/constants/constants.dart';
 
 class CartOffers1Controller extends GetxController with StateMixin {
-  var productList = Rxn<List<Product>>();
+  var productList = Rxn<List<Product>>([]);
   var averageRatingList = Rxn<List<double>>();
   var category1 = ('').obs;
   var category2 = ('').obs;

@@ -32,10 +32,10 @@ class AccountScreen extends GetView<FetchAccountScreenDataController> {
                   width: MediaQuery.sizeOf(context).width,
                   child: Stack(
                     children: [
-                      // const Positioned(
-                      //   top: 0,
-                      //   child: NameBar(),
-                      // ),
+                      const Positioned(
+                        top: 0,
+                        child: NameBar(),
+                      ),
                       Positioned(
                           top: 50,
                           child: Container(

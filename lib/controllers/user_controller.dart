@@ -32,13 +32,14 @@ class UserController extends GetxController {
       http.Response res = await userApi.getUserData();
 
       if (res.statusCode == 200) {
-        User user = User.fromJson(
+        User userFetch = User.fromJson(
           jsonEncode(
             jsonDecode(res.body),
           ),
         );
-        saveToStorage(user);
-        return user;
+        saveToStorage(userFetch);
+        user.value = userFetch;
+        return userFetch;
       } else {
         throw Exception(jsonDecode(res.body)['msg']);
       }

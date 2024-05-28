@@ -50,9 +50,9 @@ class BottomBar extends GetView<BottomBarController> {
                 child: Stack(
                   children: [
                     pages[lastIndex],
-                    Container(
-                      color: controllerBottomBar.isOpen.value==true? Colors.black87.withOpacity(0.5):Colors.black87.withOpacity(0),
-                    )
+                    controllerBottomBar.isOpen.value == true
+                        ? Container(color: Colors.black87.withOpacity(0.5))
+                        : Container()
                   ],
                 ),
               ),
@@ -115,8 +115,7 @@ class BottomBar extends GetView<BottomBarController> {
                       }
                     } else {
                       lastIndex = page;
-                      controllerBottomBar
-                            .onBottomBarClickedHandler(page);
+                      controllerBottomBar.onBottomBarClickedHandler(page);
                     }
                   },
                 ))

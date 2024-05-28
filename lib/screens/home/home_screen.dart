@@ -27,7 +27,7 @@ class HomeScreen extends GetView<HomeController> {
     //     .read<AdminFourImageOfferCubit>()
     //     .adminGetFourImagesOffer(isUser: true);
 
-    return Scaffold(
+    return Obx(() => Scaffold(
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(60),
           child: CustomAppBar(),
@@ -94,6 +94,6 @@ class HomeScreen extends GetView<HomeController> {
               ),
             ],
           ),
-        ));
+        )));
   }
 }

@@ -34,7 +34,7 @@ class CarouselImageWidget extends GetView<CarouselImageController> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Obx(() => Stack(
       children: [
         CustomCarouselSliderMap(
             sliderImages: Constants.carouselImages,
@@ -46,7 +46,7 @@ class CarouselImageWidget extends GetView<CarouselImageController> {
           left: MediaQuery.sizeOf(context).width / 3.3,
           child: DotsIndicatorMap(
             controller: _controller,
-            current: index,
+            current: controller.indexCarouselImage.value,
             sliderImages: Constants.carouselImages,
           ),
         ),
@@ -74,6 +74,6 @@ class CarouselImageWidget extends GetView<CarouselImageController> {
           child: BottomOffers(),
         ),
       ],
-    );
+    ));
   }
 }

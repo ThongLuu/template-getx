@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_template/routes/app_pages.dart';
+import 'package:get/get.dart';
 // import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import '../../widgets/common_widgets/search_text_form_field.dart';
 import '../../utils/constants/constants.dart';
@@ -16,8 +18,8 @@ class CustomAppBar extends StatelessWidget {
         decoration: const BoxDecoration(gradient: Constants.appBarGradient),
       ),
       title: SearchTextFormField(onTapSearchField: (String query) {
-        // context.pushNamed(AppRouteConstants.searchScreenRoute.name,
-        //     pathParameters: {'searchQuery': query});
+        Get.toNamed(Routes.SEARCHSCREENROUTE,
+            parameters: {'searchQuery': query});
       }),
     );
   }

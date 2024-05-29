@@ -16,4 +16,6 @@ abstract class Routes {
   static String PAYMENTSCREENROUTE ='/payment-screen';
   static String CARTSCREENSCREENROUTE = '/cart-screen';
   static String ANOTHERSCREENROUTE ='/another-screen';
+  static String SEARCHORDERSSCREENROUTE ='/search-orders-screen';
+  static String SEARCHSCREENROUTE ='/search-screen';
 }

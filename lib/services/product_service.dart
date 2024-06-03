@@ -21,11 +21,11 @@ class ProductsApis {
           });
 
       if (res.statusCode == 200) {
-        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+        for (int i = 0; i < jsonDecode(res.body)['products'].length; i++) {
           productList.add(
             Product.fromJson(
               jsonEncode(
-                jsonDecode(res.body)[i],
+                jsonDecode(res.body)['products'][i],
               ),
             ),
           );

@@ -14,52 +14,54 @@ class SearchScreen extends GetView<SearchQueryController> {
   @override
   Widget build(BuildContext context) {
     var controllerUser = Get.put(UserController());
+    controller.searchEventHandler(searchQuery);
     return Obx(() => Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: CustomAppBar(),
-      ),
-      body: 
-      // BlocConsumer<SearchBloc, SearchState>(
-      //   listener: (context, state) {
-      //     if (state is SearchErrorS) {
-      //       showSnackBar(context, state.errorString);
-      //     }
-      //   },
-        // builder: (context, state) {
-          // if (state is SearchLoadingS) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // } else if (state is SearchSuccessS) {
-            controller.searchProducts.value!.isNotEmpty && controller.averageRatingList.value!.isNotEmpty?
-             Column(
-              children: [
-                controllerUser.user.value.address == ''
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(60),
+          child: CustomAppBar(),
+        ),
+        body:
+            // BlocConsumer<SearchBloc, SearchState>(
+            //   listener: (context, state) {
+            //     if (state is SearchErrorS) {
+            //       showSnackBar(context, state.errorString);
+            //     }
+            //   },
+            // builder: (context, state) {
+            // if (state is SearchLoadingS) {
+            //   return const Center(
+            //     child: CircularProgressIndicator(),
+            //   );
+            // } else if (state is SearchSuccessS) {
+            controller.searchProducts.value!.isNotEmpty &&
+                    controller.averageRatingList.value!.isNotEmpty
+                ? Column(
+                    children: [
+                      controllerUser.user.value.address == ''
                           ? const SizedBox()
-                          : const AddressBar()
-                ,
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: controller.searchProducts.value!.length,
-                    itemBuilder: ((context, index) {
-                      final product = controller.searchProducts.value![index];
-                      final averageRating = controller.averageRatingList.value![index];
+                          : const AddressBar(),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.searchProducts.value!.length,
+                          itemBuilder: ((context, index) {
+                            final product =
+                                controller.searchProducts.value![index];
+                            final averageRating =
+                                controller.averageRatingList.value![index];
 
-                      return SingleListingProduct(
-                        product: product,
-                        averageRating: averageRating,
-                        deliveryDate: getDeliveryDate(),
-                      );
-                    }),
-                  ),
-                ),
-              ],
-            )
-          : const SizedBox()
-    )) ;
+                            return SingleListingProduct(
+                              product: product,
+                              averageRating: averageRating,
+                              deliveryDate: getDeliveryDate(),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox()));
   }
 }

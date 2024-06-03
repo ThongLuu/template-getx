@@ -5,20 +5,20 @@ import 'package:get/get.dart';
 
 class SearchQueryController extends GetxController with StateMixin {
   var searchProducts = Rxn<List<Product>>([]);
-  var averageRatingList = Rxn<List<double>>();
+  var averageRatingList = Rxn<List<double>>([]);
   var errorString = ('').obs;
 
   ProductsApis productApis = ProductsApis();
   AccountApis accountApis = AccountApis();
 
-  void searchEventHandler(event, emit) async {
+  void searchEventHandler(String searchQuery) async {
     try {
       change(null, status: RxStatus.loading());
       List<Product> searchProductsTemp;
       List<double> averageRatingListTemp = [];
       double rating;
 
-      searchProductsTemp = await productApis.searchProducts(event.searchQuery);
+      searchProductsTemp = await productApis.searchProducts(searchQuery);
 
       for (int i = 0; i < searchProductsTemp.length; i++) {
         rating = await accountApis.getAverageRating(searchProductsTemp[i].id!);
